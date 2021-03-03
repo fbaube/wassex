@@ -1,0 +1,45 @@
+gorilla/websocket does not support web assembly.
+Use nhooyr/websocket, which does.
+
+https://github.com/nhooyr/websocket
+https://pkg.go.dev/nhooyr.io/websocket
+
+- Fully passes the WebSocket autobahn-testsuite
+- Single dependency
+- JSON and protobuf helpers in the wsjson and wspb subpackages
+- Zero-alloc reads and writes
+- net.Conn wrapper
+- Ping pong API
+- Compiles to wasm
+
+The echo example is production quality and demos the complete API:
+https://github.com/nhooyr/websocket/tree/master/examples/echo
+The chat example is a full stack example:
+https://github.com/nhooyr/websocket/tree/master/examples/chat
+
+Some important caveats:
+- Accept always errors out
+- Conn.Ping is no-op
+- HTTPClient, HTTPHeader and CompressionMode in DialOptions are no-op
+- *http.Response from Dial is &http.Response{} with 101 on success
+
+---
+
+If that fails, try this:
+
+https://stackoverflow.com/questions/55750947/websockets-over-webassembly-generated-by-golang
+
+Get a WebSocket object from the global JS object, which is "window" in
+a browser. Using only the "syscall/js" library, it looks like this:
+
+ws := js.Global().Get("WebSocket").New("ws://localhost:8080/ws")
+
+ws.Call("addEventListener", "open", js.FuncOf(func(this js.Value, args []js.Value) interface{} {
+    fmt.Println("open")
+    ws.Call("send", "message")
+    return nil
+}))
+
+---
+
+END
