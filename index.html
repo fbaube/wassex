@@ -1,15 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html>
 <html>
-  <head>
-    <meta charset="utf-8"/>
-    <script src="wasm_exec.js"></script>
-    <script>
-      const go = new Go();
-      WebAssembly.instantiateStreaming(
-          fetch("client.wasm"), go.importObject).then((result) => {
-	      go.run(result.instance);
-	  });
-    </script>
-  </head>
-  <body>
+<head>
+  <title>Title of the document</title>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <script src="wasm_exec.js"></script>
+  <script>
+    const go = new Go();
+    WebAssembly.instantiateStreaming(
+        fetch("client.wasm"), go.importObject).then((result) => {
+	    go.run(result.instance);
+	});
+  </script>
+</head>
+<body>
+  <header>
+    <p><i>Server status:</i> <span id="serverstatus">Loading...</span></p>
+    <h1>Amalgamated EuroDerf&trade;</h1>
+    <div id="servermessages" style="height:200px;width:50%;border:1px solid #666;overflow:auto;"></div>
   </body>
 </html>
